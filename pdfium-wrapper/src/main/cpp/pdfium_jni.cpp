@@ -34,16 +34,17 @@ void releaseString(JNIEnv* env, jstring jStr, const char* cStr) {
     }
 }
 
+extern "C" {
 // ========== Inicialización y Destrucción ==========
 
-extern "C" JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_initLibrary
+JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_initLibrary
         (JNIEnv* env, jclass clazz) {
     LOGD("Inicializando PDFium...");
     FPDF_InitLibrary();
     LOGD("PDFium inicializado correctamente");
 }
 
-extern "C" JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_destroyLibrary
+JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_destroyLibrary
         (JNIEnv* env, jclass clazz) {
     LOGD("Destruyendo PDFium...");
     FPDF_DestroyLibrary();
@@ -52,7 +53,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_destroy
 
 // ========== Carga de Documentos ==========
 
-extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_loadDocument
+JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_loadDocument
         (JNIEnv* env, jclass clazz, jstring filePath, jstring password) {
 
     const char* cFilePath = jstringToChar(env, filePath);
@@ -75,7 +76,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_loadDo
     return TO_JLONG(document);
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_loadMemDocument___3BLjava_lang_String_2
+JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_loadMemDocument___3BLjava_lang_String_2
         (JNIEnv* env, jclass clazz, jbyteArray data, jstring password) {
 
     if (data == nullptr) {
@@ -105,7 +106,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_loadMe
     return TO_JLONG(document);
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_loadMemDocument__Ljava_nio_ByteBuffer_2Ljava_lang_String_2
+JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_loadMemDocument__Ljava_nio_ByteBuffer_2Ljava_lang_String_2
         (JNIEnv* env, jclass clazz, jobject buffer, jstring password) {
 
     if (buffer == nullptr) {
@@ -123,7 +124,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_loadMe
 
     const char* cPassword = jstringToChar(env, password);
 
-    LOGD("Cargando documento desde ByteBuffer (%lld bytes)", (long long)capacity);
+    LOGD("Cargando documento desde ByteBuffer (%lld bytes)", (long long) capacity);
 
     FPDF_DOCUMENT document = FPDF_LoadMemDocument(bufferPtr, static_cast<int>(capacity), cPassword);
 
@@ -139,7 +140,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_loadMe
     return TO_JLONG(document);
 }
 
-extern "C" JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_closeDocument
+JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_closeDocument
         (JNIEnv* env, jclass clazz, jlong document) {
 
     if (document == 0) {
@@ -153,7 +154,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_closeDo
 
 // ========== Información del Documento ==========
 
-extern "C" JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getPageCount
+JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getPageCount
         (JNIEnv* env, jclass clazz, jlong document) {
 
     if (document == 0) {
@@ -166,7 +167,7 @@ extern "C" JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getPage
     return count;
 }
 
-extern "C" JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getFileVersion
+JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getFileVersion
         (JNIEnv* env, jclass clazz, jlong document) {
 
     if (document == 0) {
@@ -184,7 +185,7 @@ extern "C" JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getFile
     return -1;
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getDocPermissions
+JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getDocPermissions
         (JNIEnv* env, jclass clazz, jlong document) {
 
     if (document == 0) {
@@ -197,7 +198,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getDoc
     return static_cast<jlong>(permissions);
 }
 
-extern "C" JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getLastError
+JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getLastError
         (JNIEnv* env, jclass clazz) {
 
     unsigned long error = FPDF_GetLastError();
@@ -209,7 +210,7 @@ extern "C" JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getLast
 
 // ========== Operaciones con Páginas ==========
 
-extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_loadPage
+JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_loadPage
         (JNIEnv* env, jclass clazz, jlong document, jint pageIndex) {
 
     if (document == 0) {
@@ -231,7 +232,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_loadPa
     return TO_JLONG(page);
 }
 
-extern "C" JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_closePage
+JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_closePage
         (JNIEnv* env, jclass clazz, jlong page) {
 
     if (page == 0) {
@@ -243,7 +244,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_closePa
     FPDF_ClosePage(TO_FPDF_PAGE(page));
 }
 
-extern "C" JNIEXPORT jdouble JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getPageWidth
+JNIEXPORT jdouble JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getPageWidth
         (JNIEnv* env, jclass clazz, jlong page) {
 
     if (page == 0) {
@@ -256,7 +257,7 @@ extern "C" JNIEXPORT jdouble JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getP
     return width;
 }
 
-extern "C" JNIEXPORT jdouble JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getPageHeight
+JNIEXPORT jdouble JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getPageHeight
         (JNIEnv* env, jclass clazz, jlong page) {
 
     if (page == 0) {
@@ -269,7 +270,7 @@ extern "C" JNIEXPORT jdouble JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getP
     return height;
 }
 
-extern "C" JNIEXPORT jdoubleArray JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getPageSizeByIndex
+JNIEXPORT jdoubleArray JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getPageSizeByIndex
         (JNIEnv* env, jclass clazz, jlong document, jint pageIndex) {
 
     if (document == 0) {
@@ -303,7 +304,7 @@ extern "C" JNIEXPORT jdoubleArray JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI
 
 // ========== Renderizado - Bitmaps ==========
 
-extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_createBitmap
+JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_createBitmap
         (JNIEnv* env, jclass clazz, jint width, jint height, jboolean alpha) {
 
     if (width <= 0 || height <= 0) {
@@ -324,7 +325,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_create
     return TO_JLONG(bitmap);
 }
 
-extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_createBitmapEx
+JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_createBitmapEx
         (JNIEnv* env, jclass clazz, jint width, jint height, jint format) {
 
     if (width <= 0 || height <= 0) {
@@ -345,7 +346,7 @@ extern "C" JNIEXPORT jlong JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_create
     return TO_JLONG(bitmap);
 }
 
-extern "C" JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_destroyBitmap
+JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_destroyBitmap
         (JNIEnv* env, jclass clazz, jlong bitmap) {
 
     if (bitmap == 0) {
@@ -357,7 +358,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_destroy
     FPDFBitmap_Destroy(TO_FPDF_BITMAP(bitmap));
 }
 
-extern "C" JNIEXPORT jboolean JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_fillRect
+JNIEXPORT jboolean JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_fillRect
         (JNIEnv* env, jclass clazz, jlong bitmap, jint left, jint top, jint width, jint height, jint color) {
 
     if (bitmap == 0) {
@@ -373,7 +374,7 @@ extern "C" JNIEXPORT jboolean JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_fil
     return result ? JNI_TRUE : JNI_FALSE;
 }
 
-extern "C" JNIEXPORT jobject JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getBitmapBuffer
+JNIEXPORT jobject JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getBitmapBuffer
         (JNIEnv* env, jclass clazz, jlong bitmap) {
 
     if (bitmap == 0) {
@@ -393,12 +394,12 @@ extern "C" JNIEXPORT jobject JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getB
 
     jlong capacity = static_cast<jlong>(stride) * height;
 
-    LOGD("Buffer del bitmap: %dx%d, stride=%d, capacity=%lld", width, height, stride, (long long)capacity);
+    LOGD("Buffer del bitmap: %dx%d, stride=%d, capacity=%lld", width, height, stride, (long long) capacity);
 
     return env->NewDirectByteBuffer(buffer, capacity);
 }
 
-extern "C" JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getBitmapStride
+JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getBitmapStride
         (JNIEnv* env, jclass clazz, jlong bitmap) {
 
     if (bitmap == 0) {
@@ -411,7 +412,7 @@ extern "C" JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getBitm
     return stride;
 }
 
-extern "C" JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getBitmapWidth
+JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getBitmapWidth
         (JNIEnv* env, jclass clazz, jlong bitmap) {
 
     if (bitmap == 0) {
@@ -424,7 +425,7 @@ extern "C" JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getBitm
     return width;
 }
 
-extern "C" JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getBitmapHeight
+JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getBitmapHeight
         (JNIEnv* env, jclass clazz, jlong bitmap) {
 
     if (bitmap == 0) {
@@ -437,7 +438,7 @@ extern "C" JNIEXPORT jint JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_getBitm
     return height;
 }
 
-extern "C" JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_renderPageBitmap
+JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_renderPageBitmap
         (JNIEnv* env, jclass clazz, jlong bitmap, jlong page,
          jint startX, jint startY, jint sizeX, jint sizeY, jint rotate, jint flags) {
 
@@ -457,7 +458,7 @@ extern "C" JNIEXPORT void JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_renderP
 
 // ========== Conversión de Coordenadas ==========
 
-extern "C" JNIEXPORT jdoubleArray JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_deviceToPage
+JNIEXPORT jdoubleArray JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_deviceToPage
         (JNIEnv* env, jclass clazz, jlong page, jint startX, jint startY,
          jint sizeX, jint sizeY, jint rotate, jint deviceX, jint deviceY) {
 
@@ -492,7 +493,7 @@ extern "C" JNIEXPORT jdoubleArray JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI
     return jArray;
 }
 
-extern "C" JNIEXPORT jintArray JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_pageToDevice
+JNIEXPORT jintArray JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_pageToDevice
         (JNIEnv* env, jclass clazz, jlong page, jint startX, jint startY,
          jint sizeX, jint sizeY, jint rotate, jdouble pageX, jdouble pageY) {
 
@@ -525,4 +526,5 @@ extern "C" JNIEXPORT jintArray JNICALL Java_com_fcl_pdfium_1wrapper_PdfiumJNI_pa
     env->SetIntArrayRegion(jArray, 0, 2, temp);
 
     return jArray;
+}
 }
