@@ -11,6 +11,11 @@ cmake_minimum_required(VERSION 3.22.1)
 # build script scope).
 project("pdfium_wrapper")
 
+# ========== SOPORTE PARA PÁGINAS DE 16 KB ==========
+# Habilitar soporte flexible de tamaños de página
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=1")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=1")
+
 # Creates and names a library, sets it as either STATIC
 # or SHARED, and provides the relative paths to its source code.
 # You can define multiple libraries, and CMake builds them for you.
@@ -26,12 +31,27 @@ project("pdfium_wrapper")
 # used in the AndroidManifest.xml file.
 add_library(${CMAKE_PROJECT_NAME} SHARED
         # List C/C++ source files with relative paths to this CMakeLists.txt.
-        native_functions.cpp)
+        native_functions.cpp
+        pdfium_jni.cpp)
+
+# Agregar directorios de includes
+target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
+        ${CMAKE_CURRENT_SOURCE_DIR}/../jniLibs/include
+)
+
+# Importar libpdfium.so como biblioteca precompilada
+add_library(pdfium SHARED IMPORTED)
+
+# Configurar la ubicación de libpdfium.so según el ABI
+set_target_properties(pdfium PROPERTIES
+        IMPORTED_LOCATION ${CMAKE_CURRENT_SOURCE_DIR}/../jniLibs/libs/${ANDROID_ABI}/libpdfium.so
+)
 
 # Specifies libraries CMake should link to your target library. You
 # can link libraries from various origins, such as libraries defined in this
 # build script, prebuilt third-party libraries, or Android system libraries.
 target_link_libraries(${CMAKE_PROJECT_NAME}
         # List libraries link to the target library
+        pdfium      # Tu libpdfium.so precompilada
         android
         log)

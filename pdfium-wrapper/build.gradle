@@ -13,9 +13,19 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "consumer-rules.pro"
+
+        ndk {
+            // Especifica los ABIs que quieres soportar
+            abiFilters 'arm64-v8a', 'armeabi-v7a', 'x86_64'
+        }
+
         externalNativeBuild {
             cmake {
                 cppFlags "-std=c++14"
+                // Argumentos adicionales si necesitas
+                arguments "-DANDROID_STL=c++_shared"
+                // Argumentos adicionales para 16 KB page size
+                arguments "-DANDROID_SUPPORT_FLEXIBLE_PAGE_SIZES=ON"
             }
         }
     }
@@ -32,9 +42,15 @@ android {
             version "3.22.1"
         }
     }
+    // Empaquetar las bibliotecas .so precompiladas
+    sourceSets {
+        main {
+            jniLibs.srcDirs = ['src/main/jniLibs']
+        }
+    }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_11
-        targetCompatibility JavaVersion.VERSION_11
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 }
 
