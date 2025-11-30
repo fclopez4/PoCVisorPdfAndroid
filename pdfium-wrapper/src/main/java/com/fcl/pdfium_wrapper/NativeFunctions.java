@@ -1,6 +1,6 @@
 package com.fcl.pdfium_wrapper;
 
-public class NativeLib {
+public class NativeFunctions {
 
     // Used to load the 'pdfium_wrapper' library on application startup.
     static {

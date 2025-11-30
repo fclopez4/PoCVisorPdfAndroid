@@ -9,7 +9,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import com.fcl.pdfium_wrapper.NativeLib;
+import com.fcl.pdfium_wrapper.NativeFunctions;
 import com.fcl.pocvisorpdf.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
@@ -34,6 +34,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        binding.txtsaludo.setText(new NativeLib().stringFromJNI());
+        binding.txtsaludo.setText(new NativeFunctions().stringFromJNI());
     }
 }
