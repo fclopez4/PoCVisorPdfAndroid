@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- ========== PERMISOS ========== -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -11,6 +16,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PoCVisorPdf">
+
+        <!-- ========== DECLARACIÓN CRÍTICA PARA 16 KB PAGE SIZE ========== -->
+        <property
+            android:name="android.app.PAGE_SIZE"
+            android:value="16KB" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true">
